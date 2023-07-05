@@ -6,7 +6,15 @@ import wishlist from "../images/wishlist.svg";
 import user from "../images/user.svg";
 import cart from "../images/cart.svg";
 import menu from "../images/menu.svg";
+import { useDispatch, useSelector } from "react-redux";
+import { getCart } from "../features/user/userSlice";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
+import { getAProduct } from "../features/products/productSlice";
+
 const Header = () => {
+  const authState = useSelector((state) => state.user);
+
   return (
     <>
       <header className="header-top-strip py-2">
@@ -30,13 +38,30 @@ const Header = () => {
                 <p className="mb-0">Wishlist</p>
               </Link>
               |
-              <Link to="/login" className=" text-white">
-                <p className="mb-0">Log in</p>
-              </Link>
-              |
-              <Link to="/signup" className="text-white">
-                <p className="mb-0">Sign up</p>
-              </Link>
+              {authState.loginUser !== undefined ? (
+                <Link
+                  to={
+                    authState?.loginUser === undefined
+                      ? "/login"
+                      : "/my-profile"
+                  }
+                  className=" text-white"
+                >
+                  <p className="mb-0">
+                    Welcome, {authState.loginUser?.firstname}
+                  </p>
+                </Link>
+              ) : (
+                <div className="text-white d-flex justify-content-center gap-2">
+                  <Link to="/login" className="text-white">
+                    <p className="mb-0">Log In</p>
+                  </Link>
+                  |
+                  <Link to="/signup" className="text-white">
+                    <p className="mb-0">Sign up</p>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -121,9 +146,9 @@ const Header = () => {
               </header>
             </div> */}
             <div className="container-info d-flex flex-direction-row text-white justify-content-center align-items-center gap-2 ">
-              <div>
+              {/* <div>
                 <p className="mb-0 name">Welcome, Sandy</p>
-              </div>
+              </div> */}
               <div className="header-upper-links d-flex align-items-center justify-content-between">
                 <div>
                   <Link
